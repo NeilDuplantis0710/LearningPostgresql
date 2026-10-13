@@ -102,3 +102,18 @@ ALTER TABLE people DROP COLUMN employed;
 
 -- Selecting to insert only some values, and the rest being null.
 INSERT INTO people (id, first_name, employed) VALUES (4, 'Chris', true);
+
+
+
+
+-- Linking one table with another.
+
+CREATE TABLE things(
+    id SERIAL PRIMARY KEY,
+	inventory_number VARCHAR(255) UNIQUE,
+	thing_name VARCHAR(255) NOT NULL,
+	desciption VARCHAR(255),
+	price DECIMAL(10,2) CHECK(price >= 0), -- We have put a condition that Price cannot be negative
+	item_owner INT;
+	CONSTRAINT fk_item_owneR FOREIGN KEY (item_owner) REFERENCES people(id)
+);
