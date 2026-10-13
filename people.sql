@@ -17,10 +17,16 @@ CREATE TABLE IF NOT EXISTS people (
 TRUNCATE TABLE people;
 
 -- Inserting some values within the table
-INSERT INTO people(first_name, last_name ,age, job) VALUES ('Mike', 'Smith', 45, 'Programmer'), ('Lisa', 'Woods', 30, 'Accountant'), ('Chris', 'Stones', 80, 'Programmer');
+INSERT INTO people(first_name, last_name ,age, job) VALUES 
+('Mike', 'Smith', 45, 'Programmer'), 
+('Lisa', 'Woods', 30, 'Accountant'), 
+('Chris', 'Stones', 80, 'Programmer'),
+('John', 'Smith', 80, 'Programmer'),
+('Susan', 'Smith', 32, 'Accountant'),
+('Bob', 'Gates', 32, 'Designer');
 
 -- Displaying all the values of the full_name and age in table "people", with a filter age<50.
--- SELECT first_name, age FROM people WHERE age<50;
+-- SELE/CT first_name, age FROM people WHERE age<50;
 
 -- Displaying all the values of first_name, last_name and age in table "people", with a filter "LIKE 'S%'" AND age<50, what does it mean is that, it will give us the values of last_name starting with 'S', and also with an age less than 50.
 SELECT first_name, last_name ,age FROM people WHERE age<50 AND last_name LIKE 'S%'
@@ -78,6 +84,15 @@ SELECT job, MAX(age) FROM people GROUP BY job;
 
 -- Gives the Minimum age of the person working in that job.
 SELECT job, MIN(age) FROM people GROUP BY job;
+
+-- Gives a set of a specific job with a specific last_name, and gives the average age of employees working in that set.
+SELECT job, last_name , AVG(age) FROM people GROUP BY job, last_name;
+
+-- Gives a set of a specific job with a specific last_name, and gives the average age of employees working in that set, where the quantity of the employees is more than 1.
+SELECT job, last_name, AVG(age) FROM people GROUP BY job, last_name HAVING COUNT(*)>1;
+
+-- Will only give us the statrting 3.
+SELECT * FROM people LIMIT 3;
 
 -- Selecting to insert only some values, and the rest being null.
 INSERT INTO people (id, first_name, employed) VALUES (4, 'Chris', true);
