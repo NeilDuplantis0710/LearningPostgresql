@@ -94,5 +94,11 @@ SELECT job, last_name, AVG(age) FROM people GROUP BY job, last_name HAVING COUNT
 -- Will only give us the statrting 3.
 SELECT * FROM people LIMIT 3;
 
+-- Altering: Once a table is created, how to change it's structure, here adding a column named "height"
+ALTER TABLE people ADD COLUMN height DECIMAL(10,2);
+
+-- Removing the employed column from the table.
+ALTER TABLE people DROP COLUMN employed;
+
 -- Selecting to insert only some values, and the rest being null.
 INSERT INTO people (id, first_name, employed) VALUES (4, 'Chris', true);
