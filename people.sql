@@ -104,16 +104,52 @@ ALTER TABLE people DROP COLUMN employed;
 INSERT INTO people (id, first_name, employed) VALUES (4, 'Chris', true);
 
 
-
+DROP TABLE IF EXISTS things;
 
 -- Linking one table with another.
 
-CREATE TABLE things(
+CREATE TABLE IF NOT EXISTS things(
     id SERIAL PRIMARY KEY,
 	inventory_number VARCHAR(255) UNIQUE,
 	thing_name VARCHAR(255) NOT NULL,
 	desciption VARCHAR(255),
 	price DECIMAL(10,2) CHECK(price >= 0), -- We have put a condition that Price cannot be negative
-	item_owner INT;
+	item_owner INT,
 	CONSTRAINT fk_item_owneR FOREIGN KEY (item_owner) REFERENCES people(id)
 );
+
+--Creating a table with Many to Many relationship
+CREATE TABLE ownership(
+    item_owner INT REFERENCES people(id),
+	item INT REFERENCES things(id),
+	PRIMARY KEY (item_owner, item)
+)
+
+INSERT INTO things (inventory_number, thing_name, price) VALUES
+('A17863', 'Laptop', 900),
+('V89037', 'Book', 20),
+('W87923', 'Pen', 5);
+
+INSERT INTO ownership VALUES(10,1), (11,1), (10,2), (12,3), (13,2)
+
+SELECT * FROM people;
+SELECT * FROM things;
+
+
+-- Connecting table "people" and "things"
+SELECT * FROM people INNER JOIN things ON people.id = things.item_owner WHERE things.price < 800;
+
+-- Left join: This means that I show all the people even if they do not own any things but I also show the thing information
+SELECT * FROM people LEFT JOIN things ON people.id = things.item_owner
+
+--Right Join: This means that I show all the things even if they are not owned by any people but I also show the People information
+SELECT * FROM people RIGHT JOIN things ON people.id = things.item_owner;
+
+--Full Join: This means that I can show all the people and things irrespective of their ownership status.
+SELECT * FROM people FULL JOIN things ON people.id = things.item_owner;
+
+
+SELECT p.first_name, p.last_name, t.thing_name, t.price 
+FROM ownership
+JOIN people p ON p.id = ownership.item_owner
+JOIN things t ON t.id = ownership.item;
